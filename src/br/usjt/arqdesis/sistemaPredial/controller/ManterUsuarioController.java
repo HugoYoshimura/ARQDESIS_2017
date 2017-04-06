@@ -30,10 +30,10 @@ public class ManterUsuarioController extends HttpServlet {
 
 		if (action.equals("insert")) {
 			insert(request, response);
-		} else if (action.equals("update")) {
-			update(request, response);
 		} else if (action.equals("select")) {
 			select(request, response);
+		} else if (action.equals("update")) {
+			update(request, response);
 		} else if (action.equals("delete")) {
 			delete(request, response);
 		}
@@ -62,7 +62,7 @@ public class ManterUsuarioController extends HttpServlet {
 
 		UsuarioService us = new UsuarioService();
 
-		user = us.carregar(Integer.parseInt(request.getParameter("id")));
+		user = us.carregar(Integer.parseInt(request.getParameter("idUsuario")));
 
 		request.setAttribute("usuario", user);
 
@@ -73,12 +73,17 @@ public class ManterUsuarioController extends HttpServlet {
 	protected void update(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String userId = request.getParameter("idUsuario");
+		
 		Usuario user = setAttributes(request);
-		user.setIdUsuario(Integer.parseInt(request.getParameter("id")));
+		
+		user.setIdUsuario(Integer.parseInt(userId));
 
 		UsuarioService us = new UsuarioService();
 
 		us.atualizar(user);
+		
+		user = us.carregar(Integer.parseInt(userId));
 
 		request.setAttribute("usuario", user);
 
@@ -93,7 +98,7 @@ public class ManterUsuarioController extends HttpServlet {
 
 		UsuarioService us = new UsuarioService();
 
-		us.excluir(Integer.parseInt(request.getParameter("id")));
+		us.excluir(Integer.parseInt(request.getParameter("idUsuario")));
 
 		request.setAttribute("usuario", user);
 
@@ -137,12 +142,4 @@ public class ManterUsuarioController extends HttpServlet {
 
 		return user;
 	}
-
-	public void validar(String pCpf, String pNome, String pLogin, String pSenha, String pSexo, String pDataNasc,
-			String pEndereco, String pCep, String pTelefone, String pEmail, String pConta, String pAcesso) {
-		boolean[] validacao = new boolean[12];
-		
-		
-	}
-
 }
