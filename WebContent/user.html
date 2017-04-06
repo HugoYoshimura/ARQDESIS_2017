@@ -83,26 +83,26 @@
 				<div class="form-group col-md-4">
 					<label for="senha">Senha</label> <input type="password"
 						class="form-control" name="senha" id="senha" maxlength="10"
-						placeholder="Digite a senha. Mínimo 6 caracteres.">
+						placeholder="Digite a senha. De 6 a 10 caracteres.">
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="form-group col-md-3">
 					<label for="cpf">CPF</label> <input type="text"
-						class="form-control" name="CPF" id="CPF" required maxlength="11"
+						class="form-control" name="cpf" id="cpf" required maxlength="11"
 						placeholder="CPF, apenas números.">
 				</div>
 
 				<div class="form-group col-md-3">
-					<label for="data">Data de Nascimento</label> <input type="date"
+					<label for="data">Data de Nascimento</label> <input type="date" name="data" id="data"
 						data-provide="datepicker" class="form-control data">
 
 				</div>
 
 
 				<div class="form-group col-md-2">
-					<label for="sexo">Sexo</label> <select>
+					<label for="sexo">Sexo</label> <select id="sexo">
 						<option value="feminino">Feminino</option>
 						<option value="masculino">Masculino</option>
 					</select>
@@ -111,20 +111,20 @@
 
 			<div class="row">
 				<div class="form-group col-md-3">
-					<label for="endereco">Endereço</label> <input type="text"
-						class="form-control" name="end" id="end" maxlength="60"
+					<label for="enderecoLb">Endereço</label> <input type="text"
+						class="form-control" name="endereco" id="endereco" maxlength="60"
 						placeholder="Endereço completo">
 				</div>
 
 				<div class="form-group col-md-3">
 					<label for="cep">CEP</label> <input type="text"
-						class="form-control" name="CEP" id="CEP" required maxlength="8"
+						class="form-control" name="cep" id="cep" required maxlength="8"
 						placeholder="CEP, apenas numeros">
 				</div>
 
 				<div class="form-group col-md-3">
-					<label for="telefone">Celular</label> <input type="tel"
-						class="form-control" name="fone" id="fone" maxlength="15"
+					<label for="telefoneLb">Celular</label> <input type="tel"
+						class="form-control" name="telefone" id="telefone" maxlength="15"
 						pattern="(?:\(\d{2}\)|\d{2})[- ]?\d{5}[- ]?\d{4}"
 						placeholder="opcional; formato (99) 99999-9999">
 				</div>
@@ -138,7 +138,7 @@
 
 			<div class="row">
 				<div class="form-group col-md-3">
-					<label for="conta">Tipo de Conta</label> <select>
+					<label for="conta">Tipo de Conta</label> <select id="conta">
 						<option value="funcionario">Funcionário</option>
 						<option value="atendente">Atendente</option>
 						<option value="sindico">Sindico</option>
@@ -146,7 +146,7 @@
 				</div>
 
 				<div class="form-group col-md-3">
-					<label for="acesso">Tipo de Acesso</label> <select>
+					<label for="acesso">Tipo de Acesso</label> <select id="acesso">
 						<option value="restrito">Restrito</option>
 						<option value="livre">Livre</option>
 					</select>
