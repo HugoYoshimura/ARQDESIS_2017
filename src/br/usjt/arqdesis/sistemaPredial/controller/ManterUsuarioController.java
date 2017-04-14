@@ -197,11 +197,4 @@ public class ManterUsuarioController extends HttpServlet {
 
 		return user;
 	}
-
-	public void validar(String pCpf, String pNome, String pLogin, String pSenha, String pSexo, String pDataNasc,
-			String pEndereco, String pCep, String pTelefone, String pEmail, String pConta, String pAcesso) {
-		boolean[] validacao = new boolean[12];
-
-	}
-
 }
