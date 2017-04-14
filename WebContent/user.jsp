@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -38,38 +40,16 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="index.html">Sistema Controle
-					Predial</a>
-			</div>
-			<ul class="nav navbar-nav">
-				<li class="disable"><a href="index.html">Home</a></li>
-				<li class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown" href="#">Usuário<span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="user.html">Cadastrar</a></li>
-						<li><a href="usuario.html">Controle</a></li>
-					</ul></li>
-				<li class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown" href="#">Empresa<span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="empresa.html">Cadastrar</a></li>
-						<li><a href="Empresa.jsp">Controle</a></li>
-					</ul></li>
-			</ul>
-		</div>
-	</nav>
+	<c:import url="Menu.jsp"/>
 	<div id="main" class="container">
-		<h3 class="page-header">Incluir Usuário</h3>
+		<h3 class="page-header">Cadastrar Usuário</h3>
 		<!-- Formulario para inclusao de clientes -->
 		<form action="ManterUsuario" method="post">
 			<div class="row">
 				<div class="form-group col-md-8">
 					<label for="nome">Nome</label> <input type="text"
 						class="form-control" name="nome" id="nome" maxlength="45"
-						placeholder="Digite o nome completo">
+						placeholder="Digite o nome completo" required>
 				</div>
 			</div>
 
@@ -77,13 +57,13 @@
 				<div class="form-group col-md-4">
 					<label for="login">Login</label> <input type="text"
 						class="form-control" name="login" id="login" maxlength="45"
-						placeholder="Digite o login">
+						placeholder="Digite o login" required>
 				</div>
 
 				<div class="form-group col-md-4">
 					<label for="senha">Senha</label> <input type="password"
 						class="form-control" name="senha" id="senha" maxlength="10"
-						placeholder="Digite a senha. De 6 a 10 caracteres.">
+						pattern="[a-zA-Z0-9!@#$%&*-_+= .;,?/ãâáàÁÀéèêÉÈÊíìÍÌõóòÕÓÒúùÚÙçÇ]{6,10}" placeholder="Digite a senha. De 6 a 10 caracteres." required>
 				</div>
 			</div>
 
@@ -91,18 +71,18 @@
 				<div class="form-group col-md-3">
 					<label for="cpf">CPF</label> <input type="text"
 						class="form-control" name="cpf" id="cpf" required maxlength="11"
-						placeholder="CPF, apenas números.">
+						pattern="\d{11}" placeholder="CPF, apenas números.">
 				</div>
 
 				<div class="form-group col-md-3">
 					<label for="data">Data de Nascimento</label> <input type="date" name="data" id="data"
-						data-provide="datepicker" class="form-control data">
+						data-provide="datepicker" class="form-control data" required>
 
 				</div>
 
 
 				<div class="form-group col-md-2">
-					<label for="sexo">Sexo</label> <select id="sexo">
+					<label for="sexo">Sexo</label> <select id="sexo" name="sexo">
 						<option value="feminino">Feminino</option>
 						<option value="masculino">Masculino</option>
 					</select>
@@ -113,20 +93,20 @@
 				<div class="form-group col-md-3">
 					<label for="enderecoLb">Endereço</label> <input type="text"
 						class="form-control" name="endereco" id="endereco" maxlength="60"
-						placeholder="Endereço completo">
+						placeholder="Endereço completo" required>
 				</div>
 
 				<div class="form-group col-md-3">
 					<label for="cep">CEP</label> <input type="text"
 						class="form-control" name="cep" id="cep" required maxlength="8"
-						placeholder="CEP, apenas numeros">
+						pattern="\d{8}" placeholder="CEP, apenas numeros">
 				</div>
 
 				<div class="form-group col-md-3">
 					<label for="telefoneLb">Celular</label> <input type="tel"
-						class="form-control" name="telefone" id="telefone" maxlength="15"
-						pattern="(?:\(\d{2}\)|\d{2})[- ]?\d{5}[- ]?\d{4}"
-						placeholder="opcional; formato (99) 99999-9999">
+						class="form-control" name="telefone" id="telefone" maxlength="12"
+						pattern="\d{12}"
+						placeholder="formato DDD987654321" required>
 				</div>
 
 				<div class="form-group col-md-3">
@@ -138,7 +118,7 @@
 
 			<div class="row">
 				<div class="form-group col-md-3">
-					<label for="conta">Tipo de Conta</label> <select id="conta">
+					<label for="conta">Tipo de Conta</label> <select id="conta" name="conta">
 						<option value="funcionario">Funcionário</option>
 						<option value="atendente">Atendente</option>
 						<option value="sindico">Sindico</option>
@@ -146,7 +126,7 @@
 				</div>
 
 				<div class="form-group col-md-3">
-					<label for="acesso">Tipo de Acesso</label> <select id="acesso">
+					<label for="acesso">Tipo de Acesso</label> <select id="acesso" name="acesso">
 						<option value="restrito">Restrito</option>
 						<option value="livre">Livre</option>
 					</select>
@@ -157,7 +137,7 @@
 			<div id="actions" class="row">
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary" name="action" value="insert">Salvar</button>
-					<a href="index.html" class="btn btn-danger">Cancelar</a>
+					<a href="index.jsp" class="btn btn-danger">Cancelar</a>
 				</div>
 			</div>
 		</form>
