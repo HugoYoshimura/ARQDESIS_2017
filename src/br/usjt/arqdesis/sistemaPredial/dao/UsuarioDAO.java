@@ -4,15 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.usjt.arqdesis.sistemaPredial.model.Usuario;
 
 public class UsuarioDAO {
 	public int criar(Usuario usuario) {
 		String sqlInsert = "INSERT INTO usuario(cpf, nome, login, senha, dataNascimento, sexo, endereco, cep, telefone, email, conta, acesso) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		// usando o try with resources do Java 7, que fecha o que abriu
-		try (Connection conn = ConnectionFactory.obtemConexao();
-				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
+		Connection conn = null;
+		try {
+			conn = ConnectionFactory.obtemConexao();
+			PreparedStatement stm = conn.prepareStatement(sqlInsert);
 			stm.setString(1, usuario.getCpf());
 			stm.setString(2, usuario.getNome());
 			stm.setString(3, usuario.getLogin());
@@ -27,13 +30,12 @@ public class UsuarioDAO {
 			stm.setString(12, usuario.getAcesso());
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
-			try (PreparedStatement stm2 = conn.prepareStatement(sqlQuery); ResultSet rs = stm2.executeQuery();) {
-				if (rs.next()) {
-					usuario.setIdUsuario(rs.getInt(1));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			stm = conn.prepareStatement(sqlQuery);
+			ResultSet rs = stm.executeQuery();
+			if (rs.next()) {
+				usuario.setIdUsuario(rs.getInt(1));
 			}
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,8 +43,7 @@ public class UsuarioDAO {
 	}
 
 	public void atualizar(Usuario usuario) {
-		String sqlUpdate = "UPDATE usuario SET cpf = ?, nome = ?, login = ?, senha = ?, dataNascimento = ?, sexo = ?, endereco = ?, cep = ?, telefone = ?, email = ?, conta = ?, acesso = ?";
-		// usando o try with resources do Java 7, que fecha o que abriu
+		String sqlUpdate = "UPDATE usuario SET cpf = ?, nome = ?, login = ?, senha = ?, dataNascimento = ?, sexo = ?, endereco = ?, cep = ?, telefone = ?, email = ?, conta = ?, acesso = ? WHERE id_usuario = ?";
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlUpdate);) {
 			stm.setString(1, usuario.getCpf());
@@ -57,7 +58,9 @@ public class UsuarioDAO {
 			stm.setString(10, usuario.getEmail());
 			stm.setString(11, usuario.getConta());
 			stm.setString(12, usuario.getAcesso());
+			stm.setInt(13, usuario.getIdUsuario());
 			stm.execute();
+			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,11 +68,11 @@ public class UsuarioDAO {
 
 	public void excluir(int id) {
 		String sqlDelete = "DELETE FROM usuario WHERE id_usuario = ?";
-		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlDelete);) {
 			stm.setInt(1, id);
 			stm.execute();
+			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,7 +82,6 @@ public class UsuarioDAO {
 		Usuario usuario = new Usuario();
 		usuario.setIdUsuario(id);
 		String sqlSelect = "SELECT cpf, nome, login, senha, dataNascimento, sexo, endereco, cep, telefone, email, conta, acesso FROM usuario WHERE usuario.id_usuario = ?";
-		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
 			stm.setInt(1, usuario.getIdUsuario());
@@ -94,7 +96,7 @@ public class UsuarioDAO {
 					usuario.setEndereco(rs.getString("endereco"));
 					usuario.setCep(rs.getString("cep"));
 					usuario.setTelefone(rs.getString("telefone"));
-					usuario.setTelefone(rs.getString("email"));
+					usuario.setEmail(rs.getString("email"));
 					usuario.setConta(rs.getString("conta"));
 					usuario.setAcesso(rs.getString("acesso"));
 				} else {
@@ -112,6 +114,7 @@ public class UsuarioDAO {
 					usuario.setConta(null);
 					usuario.setAcesso(null);
 				}
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -119,6 +122,41 @@ public class UsuarioDAO {
 			System.out.print(e1.getStackTrace());
 		}
 		return usuario;
+	}
+
+	public List<Usuario> carregarTodosUsuarios() {
+		Usuario usuario;
+
+		List<Usuario> lista = new ArrayList<Usuario>();
+
+		String sqlSelect = "SELECT id_usuario, cpf, nome, login, senha, dataNascimento, sexo, endereco, cep, telefone, email, conta, acesso FROM usuario;";
+
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+			try (ResultSet rs = stm.executeQuery();) {
+				while(rs.next()) {
+					usuario = new Usuario();
+					usuario.setIdUsuario(rs.getInt("id_usuario"));
+					usuario.setCpf(rs.getString("cpf"));
+					usuario.setNome(rs.getString("nome"));
+					usuario.setLogin(rs.getString("login"));
+					usuario.setSenha(rs.getString("senha"));
+					usuario.setDataNascimento(rs.getDate("dataNascimento"));
+					usuario.setSexo(rs.getString("sexo"));
+					usuario.setEndereco(rs.getString("endereco"));
+					usuario.setCep(rs.getString("cep"));
+					usuario.setTelefone(rs.getString("telefone"));
+					usuario.setEmail(rs.getString("email"));
+					usuario.setConta(rs.getString("conta"));
+					usuario.setAcesso(rs.getString("acesso"));
+					
+					lista.add(usuario);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 }
