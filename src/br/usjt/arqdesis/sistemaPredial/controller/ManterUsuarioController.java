@@ -20,22 +20,39 @@ public class ManterUsuarioController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doPost(request, response);
+		select(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String action = request.getParameter("action");
+		String action, id, command = request.getParameter("action");
 
-		if (action.equals("insert")) {
-			insert(request, response);
-		} else if (action.equals("select")) {
-			select(request, response);
-		} else if (action.equals("update")) {
-			update(request, response);
-		} else if (action.equals("delete")) {
-			delete(request, response);
+		if (command != null) {
+			if (command.length() == 6) {
+				action = command;
+				if (action != null) {
+					if (action.equals("insert")) {
+						insert(request, response);
+					} else if (action.equals("select")) {
+						select(request, response);
+					} else if (action.equals("update")) {
+						update(request, response);
+					} else if (action.equals("delete")) {
+						delete(request, response);
+					}
+				}
+
+			} else {
+				String[] cmd = command.split("-");
+				action = cmd[0];
+				id = cmd[1];
+				if(action.equals("select")) {
+					select(request, response, Integer.parseInt(id));
+				} else if(action.equals("delete")) {
+					delete(request, response, Integer.parseInt(id));
+				}
+			}
 		}
 
 	}
@@ -70,19 +87,34 @@ public class ManterUsuarioController extends HttpServlet {
 		view.forward(request, response);
 	}
 
+	protected void select(HttpServletRequest request, HttpServletResponse response, int idUser)
+			throws ServletException, IOException {
+
+		Usuario user = new Usuario();
+
+		UsuarioService us = new UsuarioService();
+
+		user = us.carregar(idUser);
+
+		request.setAttribute("usuario", user);
+
+		RequestDispatcher view = request.getRequestDispatcher("Usuario.jsp");
+		view.forward(request, response);
+	}
+
 	protected void update(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String userId = request.getParameter("idUsuario");
-		
+
 		Usuario user = setAttributes(request);
-		
+
 		user.setIdUsuario(Integer.parseInt(userId));
 
 		UsuarioService us = new UsuarioService();
 
 		us.atualizar(user);
-		
+
 		user = us.carregar(Integer.parseInt(userId));
 
 		request.setAttribute("usuario", user);
@@ -102,7 +134,22 @@ public class ManterUsuarioController extends HttpServlet {
 
 		request.setAttribute("usuario", user);
 
-		RequestDispatcher view = request.getRequestDispatcher("Usuario.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+		view.forward(request, response);
+	}
+
+	protected void delete(HttpServletRequest request, HttpServletResponse response, int idUser)
+			throws ServletException, IOException {
+
+		Usuario user = new Usuario();
+
+		UsuarioService us = new UsuarioService();
+
+		us.excluir(idUser);
+
+		request.setAttribute("usuario", user);
+
+		RequestDispatcher view = request.getRequestDispatcher("index.jsp");
 		view.forward(request, response);
 	}
 
@@ -122,6 +169,14 @@ public class ManterUsuarioController extends HttpServlet {
 
 		SimpleDateFormat dtFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
+		String dataBr = "";
+		if (pDataNasc.indexOf("-") == -1) {
+			dataBr = pDataNasc;
+		} else {
+			String[] d = pDataNasc.split("-");
+			dataBr = d[2] + "/" + d[1] + "/" + d[0];
+		}
+
 		Usuario user = new Usuario();
 		user.setCpf(pCpf);
 		user.setNome(pNome);
@@ -129,7 +184,7 @@ public class ManterUsuarioController extends HttpServlet {
 		user.setSenha(pSenha);
 		user.setSexo(pSexo);
 		try {
-			user.setDataNascimento(dtFormatter.parse(pDataNasc));
+			user.setDataNascimento(dtFormatter.parse(dataBr));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -142,4 +197,11 @@ public class ManterUsuarioController extends HttpServlet {
 
 		return user;
 	}
+
+	public void validar(String pCpf, String pNome, String pLogin, String pSenha, String pSexo, String pDataNasc,
+			String pEndereco, String pCep, String pTelefone, String pEmail, String pConta, String pAcesso) {
+		boolean[] validacao = new boolean[12];
+
+	}
+
 }
