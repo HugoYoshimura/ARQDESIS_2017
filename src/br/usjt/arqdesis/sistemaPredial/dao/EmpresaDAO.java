@@ -1,9 +1,12 @@
 package br.usjt.arqdesis.sistemaPredial.dao;
 
+import java.awt.print.Printable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.usjt.arqdesis.sistemaPredial.model.Empresa;
 
@@ -28,6 +31,7 @@ public class EmpresaDAO {
 				if (rs.next()) {
 					empresa.setIdEmpresa(rs.getInt(1));
 				}
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -51,6 +55,7 @@ public class EmpresaDAO {
 			stm.setTime(7, convertTime(empresa.getHorLigarAC()));
 			stm.setTime(8, convertTime(empresa.getHorDesligarAC()));
 			stm.execute();
+			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,6 +68,7 @@ public class EmpresaDAO {
 				PreparedStatement stm = conn.prepareStatement(sqlDelete);) {
 			stm.setInt(1, id);
 			stm.execute();
+			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,6 +103,7 @@ public class EmpresaDAO {
 					empresa.setHorLigarAC(null);
 					empresa.setHorDesligarAC(null);
 				}
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -104,6 +111,37 @@ public class EmpresaDAO {
 			System.out.print(e1.getStackTrace());
 		}
 		return empresa;
+	}
+	
+	public List<Empresa> carregarTodasEmpresas() {
+		Empresa empresa;
+		
+		List<Empresa> lista = new ArrayList<Empresa>();
+		
+		String sqlSelect = "SELECT id_empresa, cnpj, razaoSocial, nomeFantasia, horarioInicio, horarioFim, temperatura, horLigarAC, horDesligarAC FROM empresa;";
+		
+		try (Connection conn = ConnectionFactory.obtemConexao(); PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+			try(ResultSet rs = stm.executeQuery();) {
+				while(rs.next()) {
+					empresa = new Empresa();
+					empresa.setIdEmpresa(rs.getInt("id_empresa"));
+					empresa.setCnpj(rs.getString("cnpj"));
+					empresa.setRazaoSocial(rs.getString("razaoSocial"));
+					empresa.setNomeFantasia(rs.getString("nomeFantasia"));
+					empresa.setHorarioInicio(rs.getTime("horarioInicio").toString());
+					empresa.setHorarioFim(rs.getTime("horarioFim").toString());
+					empresa.setTemperatura(rs.getInt("temperatura"));
+					empresa.setHorLigarAC(rs.getTime("horLigarAC").toString());
+					empresa.setHorDesligarAC(rs.getTime("horDesligarAC").toString());
+					
+					lista.add(empresa);
+				}
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 	
 	private java.sql.Time convertTime(String tempoS) {
