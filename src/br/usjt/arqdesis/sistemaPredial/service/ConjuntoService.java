@@ -1,24 +1,50 @@
 package br.usjt.arqdesis.sistemaPredial.service;
 
+import java.util.List;
+
 import br.usjt.arqdesis.sistemaPredial.dao.ConjuntoDAO;
 import br.usjt.arqdesis.sistemaPredial.model.Conjunto;
 
 public class ConjuntoService {
 	ConjuntoDAO dao = new ConjuntoDAO();
 	
-	public int criar(Conjunto conjunto) {
-		return dao.criar(conjunto);
+	public void criar(Conjunto conjunto) {
+		dao.criar(conjunto);
 	}
 	
-	public void atualizar(Conjunto conjunto){
-		dao.atualizar(conjunto);
+	public void excluir(Conjunto conjunto) {
+		dao.excluir(conjunto);
 	}
 	
-	public void excluir(int id){
-		dao.excluir(id);
+	public Conjunto carregar(int numeroConjunto) {
+		return dao.select(numeroConjunto);
 	}
 	
-	public Conjunto carregar(int id){
-		return dao.carregar(id);
+	public List<Conjunto> carregarConjuntosVagos() {
+		return dao.carregarConjuntosVagos();
+	}
+	
+	public List<Conjunto> carregarConjuntosEmpresa(int idEmpresa) {
+		return dao.carregarConjuntosEmpresa(idEmpresa);
+	}
+	
+	public void insert(Conjunto conjunto) {
+		dao.insert(conjunto);
+	}
+	
+	public void update(Conjunto conjunto) {
+		dao.update(conjunto);
+	}
+	
+	public void delete(int numeroConjunto) {
+		dao.delete(numeroConjunto);
+	}
+	
+	public Conjunto select(int numeroConjunto) {
+		return dao.select(numeroConjunto);
+	}
+	
+	public List<Conjunto> selectAll() {
+		return dao.selectAll();
 	}
 }
