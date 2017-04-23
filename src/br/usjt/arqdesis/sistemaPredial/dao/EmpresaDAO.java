@@ -42,7 +42,7 @@ public class EmpresaDAO {
 	}
 
 	public void atualizar(Empresa empresa) {
-		String sqlUpdate = "UPDATE empresa SET cnpj = ?, razaoSocial = ?, nomeFantasia = ?, horarioInicio = ?, horarioFim = ?, temperatura = ?, horLigarAC = ?, horDesligarAC = ?";
+		String sqlUpdate = "UPDATE empresa SET cnpj = ?, razaoSocial = ?, nomeFantasia = ?, horarioInicio = ?, horarioFim = ?, temperatura = ?, horLigarAC = ?, horDesligarAC = ? WHERE id_empresa = ?";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlUpdate);) {
@@ -54,6 +54,7 @@ public class EmpresaDAO {
 			stm.setInt(6, empresa.getTemperatura());
 			stm.setTime(7, convertTime(empresa.getHorLigarAC()));
 			stm.setTime(8, convertTime(empresa.getHorDesligarAC()));
+			stm.setInt(9, empresa.getIdEmpresa());
 			stm.execute();
 			conn.close();
 		} catch (Exception e) {
