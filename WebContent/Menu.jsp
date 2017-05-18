@@ -18,9 +18,9 @@
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Empresa<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="empresa.html">Cadastrar</a></li>
+						<li><a href="controller.do?command=CadastrarEmpresa" >Cadastrar</a></li>
 						<li><a href="empresa.html">Controle</a></li>
-						<li><a href="ListaEmpresa.jsp">Lista</a></li>
+						<li><a href="controller.do?command=VisualizarEmpresa">Lista</a></li>
 					</ul></li>
 			</ul>
 		</div>
