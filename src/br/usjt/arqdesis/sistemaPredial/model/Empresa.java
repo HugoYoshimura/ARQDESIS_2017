@@ -1,15 +1,15 @@
 package br.usjt.arqdesis.sistemaPredial.model;
 
-import java.sql.Time;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Empresa {
-	
-	private int idEmpresa, temperatura, conjuntos[];
+
+	private int idEmpresa, temperatura;
+	private List<Conjunto> conjuntos;
 	private String cnpj, razaoSocial, nomeFantasia, horarioInicio, horarioFim, horLigarAC, horDesligarAC;
-	
-	public Empresa(){
-		
+
+	public Empresa() {
+
 	}
 
 	public int getIdEmpresa() {
@@ -84,13 +84,11 @@ public class Empresa {
 		this.horDesligarAC = horDesligarAC;
 	}
 
-	public int[] getConjuntos() {
+	public List<Conjunto> getConjuntos() {
 		return conjuntos;
 	}
 
-	public void setConjuntos(int[] conjuntos) {
+	public void setConjuntos(List<Conjunto> conjuntos) {
 		this.conjuntos = conjuntos;
 	}
-	
-	
 }
