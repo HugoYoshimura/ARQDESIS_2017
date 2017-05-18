@@ -11,6 +11,11 @@ import java.util.List;
 import br.usjt.arqdesis.sistemaPredial.model.Empresa;
 
 public class EmpresaDAO {
+	/**
+	 * Cadastra uma empresa nova
+	 * @param empresa Objeto empresa com os dados a serem cadastrados 
+	 * @return id da empresa cadastrada
+	 */
 	public int criar(Empresa empresa) {
 		String sqlInsert = "INSERT INTO empresa(cnpj, razaoSocial, nomeFantasia, horarioInicio, horarioFim, temperatura, horLigarAC, horDesligarAC) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		// usando o try with resources do Java 7, que fecha o que abriu
@@ -41,6 +46,10 @@ public class EmpresaDAO {
 		return empresa.getIdEmpresa();
 	}
 
+	/**
+	 * Atualiza dados de uma empresa
+	 * @param empresa Objeto empresa com dados novos a serem atualizados
+	 */
 	public void atualizar(Empresa empresa) {
 		String sqlUpdate = "UPDATE empresa SET cnpj = ?, razaoSocial = ?, nomeFantasia = ?, horarioInicio = ?, horarioFim = ?, temperatura = ?, horLigarAC = ?, horDesligarAC = ? WHERE id_empresa = ?";
 		// usando o try with resources do Java 7, que fecha o que abriu
@@ -62,6 +71,10 @@ public class EmpresaDAO {
 		}
 	}
 
+	/**
+	 * Exclui uma empresa
+	 * @param id Id da empresa a ser excluída
+	 */
 	public void excluir(int id) {
 		String sqlDelete = "DELETE FROM empresa WHERE id_empresa = ?";
 		// usando o try with resources do Java 7, que fecha o que abriu
@@ -75,6 +88,11 @@ public class EmpresaDAO {
 		}
 	}
 
+	/**
+	 * Consulta empresa a partir do id informado
+	 * @param id Id da empresa a ser consultada
+	 * @return Objeto empresa com os dados da empresa consultada 
+	 */
 	public Empresa carregar(int id) {
 		Empresa empresa = new Empresa();
 		empresa.setIdEmpresa(id);
@@ -114,6 +132,10 @@ public class EmpresaDAO {
 		return empresa;
 	}
 	
+	/**
+	 * Consulta todas as empresas
+	 * @return Lista de empresas cadastradas
+	 */
 	public List<Empresa> carregarTodasEmpresas() {
 		Empresa empresa;
 		
@@ -145,6 +167,11 @@ public class EmpresaDAO {
 		return lista;
 	}
 	
+	/**
+	 * Converte String em horário no formato sql.Time
+	 * @param tempoS String com horário
+	 * @return Horário em formato sql.Time
+	 */
 	private java.sql.Time convertTime(String tempoS) {
 		String[] tempo = tempoS.split(":");
 		int hora = Integer.parseInt(tempo[0]);
