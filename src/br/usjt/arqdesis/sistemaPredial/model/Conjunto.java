@@ -1,5 +1,7 @@
 package br.usjt.arqdesis.sistemaPredial.model;
 
+import java.util.List;
+
 public class Conjunto {
 	
 	private int idConjunto, numeroConjunto, idEmpresa;
@@ -41,5 +43,13 @@ public class Conjunto {
 		this.status = status;
 	}
 	
-	
+	public String conjuntosString(List<Conjunto> conjuntos) {
+		String result = "";
+		if (conjuntos.size() > 0) {
+			for (int i = 0; i < conjuntos.size(); i++) {
+				result += conjuntos.get(i).getNumeroConjunto() + " ";
+			}
+		}
+		return result;
+	}
 }
